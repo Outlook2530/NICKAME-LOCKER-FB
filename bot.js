@@ -4,7 +4,7 @@
  * Description: Sets same nickname for all members and resets in 4 seconds if changed.
  */
 
-const login = require("ws3-fca");
+const login = require("fca-unofficial");
 const fs = require("fs");
 const express = require("express");
 
@@ -21,7 +21,7 @@ try {
 // ✅ Configuration
 const CONFIG = {
   GROUP_THREAD_ID: "1150460107221550",        
-  LOCKED_NICKNAME: "आफत की रण्डी मां की चुदाई 🤡", // Yahan apna nickname likhein
+  LOCKED_NICKNAME: "आफत की रण्डी मां की चुदाई 🤡",
   RESET_DELAY: 4000, // 4 seconds
   POLL_INTERVAL: 30000, // 30 seconds
 };
@@ -76,7 +76,7 @@ async function setAllNicknames(api) {
     for (const userId of groupMembers) {
       try {
         await setUserNickname(api, userId);
-        await new Promise(resolve => setTimeout(resolve, 100)); // Delay
+        await new Promise(resolve => setTimeout(resolve, 100));
       } catch (error) {
         console.log(`⚠️ Failed for ${userId}, continuing...`);
       }
@@ -103,7 +103,6 @@ async function checkAndResetNicknames(api) {
     const currentNicknames = info.nicknames || {};
     let changesDetected = false;
 
-    // Check for changes
     for (const userId of groupMembers) {
       const currentNickname = currentNicknames[userId] || "";
       if (currentNickname !== CONFIG.LOCKED_NICKNAME) {
@@ -191,9 +190,9 @@ login({ appState }, (err, api) => {
 
   // Initialize bot
   loadGroupMembers(api).then(async () => {
-    await setAllNicknames(api); // First time set
-    startPolling(api); // Start polling
-    startEventListener(api); // Start event listener
+    await setAllNicknames(api);
+    startPolling(api);
+    startEventListener(api);
   }).catch(error => {
     console.error("❌ Initialization failed:", error.message);
   });
